@@ -32,7 +32,7 @@ function runDb() {
     }).then(function (answer) {
         switch (answer.action) {
             case "Add a department":
-                //call addDept function
+                addDept();
                 break;
 
             case "Add a role":
@@ -58,11 +58,30 @@ function runDb() {
             case "Update employee role":
                 //call updateRole function
                 break;
-
-
-
-
         }
     });
 
 }
+
+function addDept() {
+    inquirer
+        .prompt({
+            name: "dept",
+            type: "input",
+            message: "What is the name of the department that you would like to add?"
+        })
+        .then(function (answer) {
+            connection.query(
+                "INSERT INTO departments SET ?",
+                {
+                    dept_name: answer.dept
+                },
+                function (err) {
+                    if (err) throw err;
+                    console.log("Your department was created succesfully!");
+                    runDb();
+                }
+            );
+        });
+}
+
